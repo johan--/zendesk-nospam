@@ -22,13 +22,19 @@ The settings are found on top of the code file (zendesk-nospam.js):
  * simulate:            inspect the messages without actually 
  * maxProcess:          this limits the number of tickets to be inspected
  */
-var keywords = ["loan","credit","financial","payday","Fraudulent","iphone ","Paycheque"];
+var keywords = ["loan","credit","financial","payday","fraudulent","iphone ","paycheque"];
 var minCountKeywords = 2;
 var fileDeletedTopic = "log/log_deleted_topic.txt";
 var fileSuspendedUser = "log/log_suspended_user.txt";
 var simulate = true;
 var maxProcess = 2000;
 ```
+
+Running the code
+----------------
+For the code to run, a node.js installation is required.
+If that is not available, create it for free at [Cloud9 IDE](https://c9.io).
+Create an account, clone the github workspace and it is ready for you to use it.
 
 Warning
 -------

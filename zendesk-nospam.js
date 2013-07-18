@@ -21,6 +21,10 @@
  *        node zendesk-nospam.js -s <subdomain> -u <username> -t <token> | tee -a ./log/log_zendesk-nospam.txt
  *   or
  *        node zendesk-nospam.js -s <subdomain> -u <username> -p <password> | tee -a ./log/log_zendesk-nospam.txt
+ * 
+ * output:
+ *            <no>,<submitter.id>,<topic.id>,<keywordcount>,<rating>, <topic.title>
+ *        ex:  147,     159700586,  12011798,             0,    'ok', 'Support Custom Code Snippets'
  */
 
 "use strict";
@@ -35,7 +39,7 @@
  * simulate:            inspect the messages without actually 
  * maxProcess:          this limits the number of tickets to be inspected
  */
-var keywords = ["loan","credit","financial","payday","Fraudulent","iphone ","Paycheque"];
+var keywords = ["loan","credit","financial","payday","fraudulent","iphone ","paycheque","file.getstring"];
 var minCountKeywords = 2;
 var fileDeletedTopic = "log/log_deleted_topic.txt";
 var fileSuspendedUser = "log/log_suspended_user.txt";
@@ -53,6 +57,7 @@ var zd          = require('node-zendesk'),
 
 //process.env.NODE_DEBUG = 'true';
 var countTopic, countDone = 0;
+if (simulate) console.log("[simulation mode]");
 console.log("authenticating...");
 var zdc = zd.createClient();
 
@@ -79,7 +84,6 @@ zdc.topics.list(function (err, req, topics) {
     });
 });
 
-
 function checkTopic(topic, cb) {
     isSpamTopic(topic, function(err, keywordcount, isSpam) {
         var topicType = (isSpam ? "spam" : "ok");
@@ -97,20 +101,18 @@ function isSpamTopic(topic, cb) {
     // count keywords
     var j, keywordcount = 0;
     for (j = 0; j < keywords.length; j++) {
-        (topic.title.indexOf(keywords[j]) != -1) && keywordcount++;
-        (topic.body.indexOf(keywords[j]) != -1) && keywordcount++;
+        (topic.title.toLowerCase().indexOf(keywords[j]) != -1) && keywordcount++;
+        (topic.body.toLowerCase().indexOf(keywords[j]) != -1) && keywordcount++;
     }
 
     return cb(null, keywordcount, keywordcount >= minCountKeywords);
 }
-
 
 function topicOk(topic, keywordcount, cb) {
     topicDone(topic, keywordcount, false, function() {
         cb();
     });
 }
-
 
 function topicSpam(topic, keywordcount, cb) {
     suspendUser(topic.submitter_id, function(err, info) {
@@ -122,14 +124,13 @@ function topicSpam(topic, keywordcount, cb) {
     });
 }
 
-
 function topicDone(topic, keywordcount, isSpam, cb) {
     if (countDone >= maxProcess) process.exit(0);
     cb();
 }
 
 function removeTopic(topic, cb) {
-    simulate && cb();
+    if (simulate) return cb();
     var topic_json = JSON.stringify(topic, null, 4, true);
     writeFile(fileDeletedTopic, topic_json);
     zdc.topics.delete(topic.id, function(err) {
@@ -139,9 +140,8 @@ function removeTopic(topic, cb) {
     });
 }
 
-
 function suspendUser(uid, cb) {
-    simulate && cb();
+    if (simulate) return cb();
     zdc.users.show(uid, function (err, status, user) {
         if (err) return handleError(err);
         var user_json = JSON.stringify(user, null, 4, true);
