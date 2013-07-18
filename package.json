@@ -1,0 +1,18 @@
+{
+    "name": "zendesk-nospam",
+    "description": "Detect spam in Zendesk forums, suspend the user that submitted and delete the topic.",
+    "tags": ["web", "zendesk", "browser", "support", "spam"],
+    "version": "0.0.1",
+    "author": "Bas de Wachter <bas AT c9 DOT io>",
+    "engines": {"node": ">= 0.6.19"},
+    "dependencies": {
+        "node-zendesk": "https://github.com/c9/node-zendesk/tarball/542d73e14078f3798b492a71f6461725285f2bcf",
+        "async": "0.2.9"
+    },
+    "licenses": [
+      {
+        "type": "The MIT License",
+        "url": "http://www.opensource.org/licenses/mit-license.php"
+      }
+    ]
+}
