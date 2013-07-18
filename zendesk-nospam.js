@@ -35,12 +35,12 @@
  * simulate:            inspect the messages without actually 
  * maxProcess:          this limits the number of tickets to be inspected
  */
-var keywords = ["loan","credit","financial","payday"];
+var keywords = ["loan","credit","financial","payday","Fraudulent","iphone ","Paycheque"];
 var minCountKeywords = 2;
 var fileDeletedTopic = "log/log_deleted_topic.txt";
 var fileSuspendedUser = "log/log_suspended_user.txt";
 var simulate = true;
-var maxProcess = 200;
+var maxProcess = 2000;
 
 
 /* ------------------------------------------------------------------------------
@@ -96,8 +96,10 @@ function checkTopic(topic, cb) {
 function isSpamTopic(topic, cb) {
     // count keywords
     var j, keywordcount = 0;
-    for (j = 0; j < keywords.length; j++)
+    for (j = 0; j < keywords.length; j++) {
+        (topic.title.indexOf(keywords[j]) != -1) && keywordcount++;
         (topic.body.indexOf(keywords[j]) != -1) && keywordcount++;
+    }
 
     return cb(null, keywordcount, keywordcount >= minCountKeywords);
 }
