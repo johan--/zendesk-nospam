@@ -42,10 +42,10 @@ To authenticate to Zendesk, you need have the:
 * token (preferred) or password  
 
 These should be provided as command line parameters:
-*-s  subdomain
-*-u  user
-*-p  password
-*-t  token
+* -s  subdomain
+* -u  user
+* -p  password
+* -t  token
 
 so for example: 
 ```
@@ -55,6 +55,7 @@ node zendesk-nospam.js -s <subdomain> -u <username> -t <token> | tee -a ./log/lo
 Workflow
 --------
 A typical workflow would be:
+
 1. Inspect the spam messages
 2. Specify/modify keywords & minCountKeywords
 3. Run zendesk-nospam.js in simulation mode, inspect result and redo (2) if desired
