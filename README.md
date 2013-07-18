@@ -1,8 +1,6 @@
-zendesk-nospam
-==============
-
 Find and delete spam in your Zendesk forum
 ------------------------------------------
+
 Implementation of basic forum search functionality using the Zendesk REST API:
 Searches all topics in the forum for the specified keywords. If equal to/more than the specified number of keywords are found, it is considered spam. 
 If so, the topic is stored in a log file and deleted. The submitter/user data is stored in a file and subsequentially suspended (not deleted).
@@ -44,10 +42,10 @@ To authenticate to Zendesk, you need have the:
 * token (preferred) or password  
 
 These should be provided as command line parameters:
--s  subdomain
--u  user
--p  password
--t  token
+*-s  subdomain
+*-u  user
+*-p  password
+*-t  token
 
 so for example: 
 ```
@@ -57,20 +55,20 @@ node zendesk-nospam.js -s <subdomain> -u <username> -t <token> | tee -a ./log/lo
 Workflow
 --------
 A typical workflow would be:
-1) Inspect the spam messages
-2) Specify/modify keywords & minCountKeywords
-3) Run zendesk-nospam.js in simulation mode, inspect result and redo (2) if desired
+1. Inspect the spam messages
+2. Specify/modify keywords & minCountKeywords
+3. Run zendesk-nospam.js in simulation mode, inspect result and redo (2) if desired
 ```
 node zendesk-nospam.js -s <subdomain> -u <username> -t <token> | tee -a ./log/log_zendesk-nospam.txt
 ```
-4) Back-up users:
+4. Back-up users:
 ```
 node scripts_backup/user-fullbackup.js -s <subdomain> -u <username> -t <token> | tee -a ./log/log_zendesk-nospam.txt
 ```
-5) Back-up tickets:
+5. Back-up tickets:
 ```
 node scripts_backup/topics-fullbackup.js -s <subdomain> -u <username> -t <token> | tee -a ./log/log_zendesk-nospam.txt
 ```
-6) Run zendesk-nospam.js in non-simulation mode, check results
+6. Run zendesk-nospam.js in non-simulation mode, check results
 
 
